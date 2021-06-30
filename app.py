@@ -8,6 +8,7 @@ from time import sleep
 API_KEY = "AIzaSyAY4NyT3Du5c9i9Vs26mnt6dTJn76tKnVw"
 PS_URL = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url="
 
+Values=[]
 
 
 
@@ -20,43 +21,39 @@ def page_speed(API_KEY, link_url, PS_URL, platform ):
     fcp = result_json["originLoadingExperience"]["metrics"]["FIRST_CONTENTFUL_PAINT_MS"]["percentile"]
     lcp = result_json["originLoadingExperience"]["metrics"]["LARGEST_CONTENTFUL_PAINT_MS"]["percentile"]
     cls = result_json["originLoadingExperience"]["metrics"]["CUMULATIVE_LAYOUT_SHIFT_SCORE"]["percentile"]
+    for item in fcp,lcp,cls:
+        Values.append(item)
 
 
-    avg= (fcp+lcp+cls)/3
-    # print(type(result_json))
-    # print(fcp)
-    # print(lcp)
-    # print(cls)
-    print(avg)
-    return avg
+
+    return "done"
     sleep(0.8)
 
-    # lighthouseResult = result_json["lighthouseResult"]
-    # category = lighthouseResult["categories"]
-    # perfm = category["performance"]
-    # score = perfm["score"]
-    # print(score*100)
-# for ur in url:
-#     page_speed(API_KEY, ur, PS_URL, "mobile")
 
 csv_input=open('content-landing-pages.csv', 'r')
 csv_output=open('link.csv', 'w', newline='')
 write_score = csv.writer(csv_output)
 read_input=csv.reader(csv_input)
+write_score.writerow(["LINKS","FCP","LCP","CLS"])
 
 for row in read_input:
     try:
         url = row[0]
-        write_score.writerow([url,page_speed(API_KEY,url,PS_URL,'mobile')])
+        page_speed(API_KEY,url,PS_URL,"mobile")
+        fcp_1=Values[0]
+        lcp_1=Values[1]
+        cls_1=Values[2]
+
+        write_score.writerow([url,fcp_1,lcp_1,cls_1])
+        print("done " + "for "+ url)
+        Values.clear()
+
     except Exception as e:
-        print(e)
+        print(e + "for" +url)
+
+
 csv_input.close()
 csv_output.close()
-
-
-
-
-
 
 
 
