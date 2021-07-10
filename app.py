@@ -18,9 +18,9 @@ def page_speed(API_KEY, link_url, PS_URL, platform ):
     main_url = PS_URL + link_url + '&key='+API_KEY+'&strategy='+platform
     response = urllib.request.urlopen(main_url)
     result_json = json.loads(response.read())
-    fcp = result_json["originLoadingExperience"]["metrics"]["FIRST_CONTENTFUL_PAINT_MS"]["percentile"]
-    lcp = result_json["originLoadingExperience"]["metrics"]["LARGEST_CONTENTFUL_PAINT_MS"]["percentile"]
-    cls = result_json["originLoadingExperience"]["metrics"]["CUMULATIVE_LAYOUT_SHIFT_SCORE"]["percentile"]
+    fcp = result_json["loadingExperience"]["metrics"]["FIRST_CONTENTFUL_PAINT_MS"]["percentile"]
+    lcp = result_json["loadingExperience"]["metrics"]["LARGEST_CONTENTFUL_PAINT_MS"]["percentile"]
+    cls = result_json["loadingExperience"]["metrics"]["CUMULATIVE_LAYOUT_SHIFT_SCORE"]["percentile"]
     for item in fcp,lcp,cls:
         Values.append(item)
 
@@ -35,7 +35,7 @@ csv_output=open('link.csv', 'w', newline='')
 write_score = csv.writer(csv_output)
 read_input=csv.reader(csv_input)
 write_score.writerow(["LINKS","FCP","LCP","CLS"])
-
+ul
 for row in read_input:
     try:
         url = row[0]
@@ -49,7 +49,8 @@ for row in read_input:
         Values.clear()
 
     except Exception as e:
-        print(e + "for" +url)
+        print(e)
+
 
 
 csv_input.close()
